@@ -39,12 +39,12 @@
         return null; // Return null if the cookie is not found
     }
 
-    // Function to display the values of cf_clearance and userULID cookies
+    // Function to display the cookies and their values
     function displayCookies() {
         const cfClearance = getCookie('cf_clearance');
         const userULID = getCookie('userULID');
 
-        // Display the values or a message if cookies are not found
+        // Display the cookies or a message if not found
         const cfClearanceElement = document.getElementById('cf-clearance');
         const userUlidElement = document.getElementById('user-ulid');
 
@@ -59,6 +59,9 @@
         } else {
             userUlidElement.textContent = 'User ULID: Not found.';
         }
+
+        // Log all cookies in the console for debugging purposes
+        console.log("All cookies: ", document.cookie);
     }
 
     // Call the function on page load to display the cookie values
