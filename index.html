@@ -1,88 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List Cookies</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f7f7f7;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        #cookieList {
-            margin-top: 20px;
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .cookieItem {
-            background-color: #fff;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .cookieItem strong {
-            color: #2d3e50;
-        }
-
-        #status {
-            color: #ff0000;
-            margin-top: 20px;
-        }
-    </style>
+<title>Display Cookies</title>
+<style>
+body {
+    font-family: sans-serif;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+</style>
 </head>
 <body>
 
-    <h1>List All Cookies</h1>
-    <ul id="cookieList"></ul>
+<h1>Cookies</h1>
 
-    <p id="status"></p>
+<table id="cookieTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Expires</th>
+            <th>Domain</th>
+            <th>Path</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-    <script>
-        // Function to get all cookies
-        function getAllCookies() {
-            const cookies = document.cookie.split(';');
-            return cookies.map(cookie => {
-                const [name, value] = cookie.trim().split('=');
-                return { name, value };
-            });
+<script>
+function displayCookies() {
+    var cookieTable = document.getElementById("cookieTable").getElementsByTagName('tbody')[0];
+    cookieTable.innerHTML = ""; // Clear existing table rows
+
+    var allCookies = document.cookie;
+    var cookieArray = allCookies.split('; ');
+
+    for(var i = 0; i < cookieArray.length; i++) {
+        var nameValue = cookieArray[i].split('=');
+        var name = nameValue[0];
+        var value = nameValue[1];
+
+        var row = cookieTable.insertRow();
+        var nameCell = row.insertCell(0);
+        var valueCell = row.insertCell(1);
+        var expiresCell = row.insertCell(2);
+        var domainCell = row.insertCell(3);
+        var pathCell = row.insertCell(4);
+
+        nameCell.textContent = name;
+        valueCell.textContent = value;
+
+        // Get cookie attributes (expires, domain, path) - This part might require adjustments based on browser compatibility
+        var cookieString = cookieArray[i];
+        var expiresIndex = cookieString.indexOf('expires=');
+        if (expiresIndex != -1) {
+            var expires = cookieString.substring(expiresIndex + 8, expiresIndex + 37);
+            expiresCell.textContent = expires;
         }
 
-        // Function to display all cookies in the list
-        function displayCookies() {
-            const cookies = getAllCookies();
-            const cookieListElement = document.getElementById('cookieList');
-            const statusElement = document.getElementById('status');
-            
-            // Clear the list before appending new items
-            cookieListElement.innerHTML = '';
-
-            if (cookies.length === 0) {
-                statusElement.textContent = 'No cookies found.';
-            } else {
-                statusElement.textContent = ''; // Clear any previous error messages
-                cookies.forEach(cookie => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'cookieItem';
-                    listItem.innerHTML = `<strong>${cookie.name}</strong>: ${cookie.value}`;
-                    cookieListElement.appendChild(listItem);
-                });
-            }
+        var domainIndex = cookieString.indexOf('domain=');
+        if (domainIndex != -1) {
+            var domain = cookieString.substring(domainIndex + 7);
+            domainCell.textContent = domain;
         }
 
-        // Call the function to display cookies when the page loads
-        window.onload = displayCookies;
-    </script>
+        var pathIndex = cookieString.indexOf('path=');
+        if (pathIndex != -1) {
+            var path = cookieString.substring(pathIndex + 5);
+            pathCell.textContent = path;
+        }
+    }
+}
+
+// Display cookies on page load
+displayCookies();
+</script>
 
 </body>
 </html>
