@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Display Cookies</title>
+<title>Display Cookies 1</title>
 <style>
 body {
     font-family: sans-serif;
@@ -46,7 +46,10 @@ function displayCookies() {
     var cookieArray = allCookies.split('; ');
 
     for(var i = 0; i < cookieArray.length; i++) {
-        var nameValue = cookieArray[i].split('=');
+        var cookieString = cookieArray[i]; 
+        var parts = cookieString.split(';'); 
+
+        var nameValue = parts[0].split('=');
         var name = nameValue[0];
         var value = nameValue[1];
 
@@ -60,25 +63,16 @@ function displayCookies() {
         nameCell.textContent = name;
         valueCell.textContent = value;
 
-        // Get cookie attributes (expires, domain, path) - This part might require adjustments based on browser compatibility
-        var cookieString = cookieArray[i];
-        var expiresIndex = cookieString.indexOf('expires=');
-        if (expiresIndex != -1) {
-            var expires = cookieString.substring(expiresIndex + 8, expiresIndex + 37);
-            expiresCell.textContent = expires;
-        }
-
-        var domainIndex = cookieString.indexOf('domain=');
-        if (domainIndex != -1) {
-            var domain = cookieString.substring(domainIndex + 7);
-            domainCell.textContent = domain;
-        }
-
-        var pathIndex = cookieString.indexOf('path=');
-        if (pathIndex != -1) {
-            var path = cookieString.substring(pathIndex + 5);
-            pathCell.textContent = path;
-        }
+        for (var j = 1; j < parts.length; j++) { 
+            var attribute = parts[j].trim(); 
+            if (attribute.startsWith('Expires=')) { 
+                expiresCell.textContent = attribute.substring(8); 
+            } else if (attribute.startsWith('Domain=')) { 
+                domainCell.textContent = attribute.substring(7); 
+            } else if (attribute.startsWith('Path=')) { 
+                pathCell.textContent = attribute.substring(5); 
+            } 
+        } 
     }
 }
 
