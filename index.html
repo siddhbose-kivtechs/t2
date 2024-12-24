@@ -3,35 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Access Test</title>
+    <title>Cookie Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Checking ULID Session</h1>
-    <p id="status">Checking for ULID...</p>
 
-    <script>
-        // Function to get a specific cookie by name
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-            return null; // Return null if the cookie is not found
+<h1>Cookie Information</h1>
+
+<p id="cf-clearance">CF Clearance: Checking...</p>
+<p id="user-ulid">User ULID: Checking...</p>
+
+<script>
+    // Function to get a specific cookie by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null; // Return null if the cookie is not found
+    }
+
+    // Function to display the values of cf_clearance and userULID cookies
+    function displayCookies() {
+        const cfClearance = getCookie('cf_clearance');
+        const userULID = getCookie('userULID');
+
+        // Display the values or a message if cookies are not found
+        const cfClearanceElement = document.getElementById('cf-clearance');
+        const userUlidElement = document.getElementById('user-ulid');
+
+        if (cfClearance) {
+            cfClearanceElement.textContent = `CF Clearance: ${cfClearance}`;
+        } else {
+            cfClearanceElement.textContent = 'CF Clearance: Not found.';
         }
 
-        // Function to display the ULID session automatically
-        function displayULID() {
-            const userULID = getCookie('userULID');
-            const statusElement = document.getElementById('status');
-
-            if (userULID) {
-                statusElement.textContent = `User ULID: ${userULID}`;
-            } else {
-                statusElement.textContent = 'No ULID found in the cookie.';
-            }
+        if (userULID) {
+            userUlidElement.textContent = `User ULID: ${userULID}`;
+        } else {
+            userUlidElement.textContent = 'User ULID: Not found.';
         }
+    }
 
-        // Call the function on page load to display the ULID session
-        window.onload = displayULID;
-    </script>
+    // Call the function on page load to display the cookie values
+    window.onload = displayCookies;
+</script>
+
 </body>
 </html>
